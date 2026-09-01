@@ -11,6 +11,7 @@ from diagnosing_dollars.case_data import (
     DIAGNOSIS_QUESTIONS,
     LIQUIDITY_ORDER,
 )
+from diagnosing_dollars.progress import SNAPSHOT_PARAMETER, decode_snapshot
 
 
 def button(app: AppTest, label: str):
@@ -87,6 +88,10 @@ class PerfectCaseFlowTests(unittest.TestCase):
         final_text = "\n".join(item.value for item in app.markdown)
         self.assertNotIn("profitability", final_text.lower())
         self.assertNotIn("efficiency", final_text.lower())
+        saved_value = app.query_params[SNAPSHOT_PARAMETER]
+        saved = decode_snapshot(saved_value[0] if isinstance(saved_value, list) else saved_value)
+        self.assertEqual(saved["p"], 6)
+        self.assertTrue(saved["c"])
 
 
 if __name__ == "__main__":

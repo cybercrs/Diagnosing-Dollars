@@ -16,7 +16,6 @@ from diagnosing_dollars.case_data import (
     COMPARISON_OPTIONS,
     COMPARISON_QUESTIONS,
     CONTEXT_QUESTIONS,
-    CORRECT_EVIDENCE,
     CURRENT_FINANCIALS,
     DIAGNOSIS_QUESTIONS,
     EVIDENCE_OPTIONS,
@@ -26,12 +25,20 @@ from diagnosing_dollars.case_data import (
 from diagnosing_dollars.engine import (
     calculate_ratios,
     format_currency,
-    score_classifications,
-    score_evidence,
-    score_multiple_choice,
-    score_order,
-    score_ratio_entry,
     score_reflection,
+)
+from diagnosing_dollars.progress import (
+    SNAPSHOT_PARAMETER,
+    create_snapshot,
+    decode_snapshot,
+    encode_snapshot,
+    pack_analysis,
+    pack_classification,
+    pack_diagnosis,
+    pack_liquidity,
+    pack_ratios,
+    results_from_submissions,
+    state_from_snapshot,
 )
 
 
@@ -307,26 +314,48 @@ def inject_styles() -> None:
     )
 
 
-def initialize_state() -> None:
-    defaults = {
+def fresh_state() -> dict[str, object]:
+    session_random = random.SystemRandom()
+    account_order = list(range(len(ACCOUNTS)))
+    session_random.shuffle(account_order)
+    liquidity_option_order = list(LIQUIDITY_ORDER)
+    session_random.shuffle(liquidity_option_order)
+    return {
         "stage": 0,
         "results": {},
-        "stage_reviewed": {},
-        "reflection": "",
+        "submissions": {},
+        "completed": False,
+        "account_order": account_order,
+        "liquidity_option_order": liquidity_option_order,
     }
-    for key, value in defaults.items():
-        if key not in st.session_state:
-            st.session_state[key] = value
 
-    session_random = random.SystemRandom()
-    if "account_order" not in st.session_state:
-        account_order = list(range(len(ACCOUNTS)))
-        session_random.shuffle(account_order)
-        st.session_state.account_order = account_order
-    if "liquidity_option_order" not in st.session_state:
-        liquidity_option_order = list(LIQUIDITY_ORDER)
-        session_random.shuffle(liquidity_option_order)
-        st.session_state.liquidity_option_order = liquidity_option_order
+
+def current_snapshot_value() -> str:
+    payload = create_snapshot(
+        int(st.session_state.stage),
+        st.session_state.account_order,
+        st.session_state.liquidity_option_order,
+        st.session_state.submissions,
+    )
+    return encode_snapshot(payload)
+
+
+def persist_progress() -> None:
+    encoded = current_snapshot_value()
+    if st.query_params.get(SNAPSHOT_PARAMETER) != encoded:
+        st.query_params[SNAPSHOT_PARAMETER] = encoded
+
+
+def initialize_state() -> None:
+    if st.session_state.get("_progress_initialized"):
+        return
+
+    restored = decode_snapshot(st.query_params.get(SNAPSHOT_PARAMETER))
+    values = state_from_snapshot(restored) if restored is not None else fresh_state()
+    for key, value in values.items():
+        st.session_state[key] = value
+    st.session_state._progress_initialized = True
+    persist_progress()
 
 
 def scroll_to_top_on_stage_change() -> None:
@@ -357,7 +386,10 @@ def scroll_to_top_on_stage_change() -> None:
 def reset_case() -> None:
     for key in list(st.session_state):
         del st.session_state[key]
-    st.rerun()
+    for key, value in fresh_state().items():
+        st.session_state[key] = value
+    st.session_state._progress_initialized = True
+    persist_progress()
 
 
 def render_header() -> None:
@@ -414,13 +446,97 @@ def render_sidebar() -> None:
             st.markdown('<div class="formula-chip">Debt to assets = Total liabilities ÷ Total assets</div>', unsafe_allow_html=True)
             st.markdown('<div class="formula-chip">Debt to equity = Total liabilities ÷ Total equity</div>', unsafe_allow_html=True)
 
-        if st.button("Restart Case", width="stretch"):
-            reset_case()
+        st.button("Restart Case", width="stretch", on_click=reset_case)
 
 
 def advance() -> None:
     st.session_state.stage = min(st.session_state.stage + 1, len(STAGES) - 1)
-    st.rerun()
+    st.session_state.completed = (
+        st.session_state.stage == len(STAGES) - 1
+        and len(st.session_state.submissions) == len(MAX_SCORES)
+    )
+    persist_progress()
+
+
+def record_submission(key: str, value: object) -> None:
+    submissions = dict(st.session_state.submissions)
+    submissions[key] = value
+    st.session_state.submissions = submissions
+    st.session_state.results = results_from_submissions(submissions)
+    st.session_state.completed = False
+    persist_progress()
+
+
+def submit_classification() -> None:
+    answers = {
+        str(account["name"]): st.session_state.get(f"class_{index}", "Select a section")
+        for index, account in enumerate(ACCOUNTS)
+    }
+    if "Select a section" in answers.values():
+        st.session_state._classification_error = "Classify every account before submitting the patient chart."
+        return
+    st.session_state.pop("_classification_error", None)
+    record_submission("cl", pack_classification(answers))
+
+
+def submit_liquidity() -> None:
+    order = st.session_state.get("liquidity_order", [])
+    answers = {
+        str(question["id"]): st.session_state.get(f"context_{question['id']}", "Select an answer")
+        for question in CONTEXT_QUESTIONS
+    }
+    if len(order) != len(LIQUIDITY_ORDER) or "Select an answer" in answers.values():
+        st.session_state._liquidity_error = "Complete the liquidity order and all three judgment checks."
+        return
+    st.session_state.pop("_liquidity_error", None)
+    record_submission("li", pack_liquidity(order, answers))
+
+
+def submit_ratios() -> None:
+    entries = {
+        "working_capital": st.session_state.get("ratio_working_capital"),
+        "current_ratio": st.session_state.get("ratio_current_ratio"),
+        "debt_to_assets": st.session_state.get("ratio_debt_to_assets"),
+        "debt_to_equity": st.session_state.get("ratio_debt_to_equity"),
+    }
+    if any(value is None for value in entries.values()):
+        st.session_state._ratio_error = "Enter all four financial vital signs before submitting."
+        return
+    st.session_state.pop("_ratio_error", None)
+    record_submission("ra", pack_ratios(entries))
+
+
+def submit_analysis() -> None:
+    answers = {
+        str(question["id"]): st.session_state.get(f"analysis_{question['id']}")
+        for question in ANALYSIS_QUESTIONS
+    }
+    comparisons = {
+        str(question["id"]): st.session_state.get(f"comparison_{question['id']}", "Select a comparison")
+        for question in COMPARISON_QUESTIONS
+    }
+    if any(value is None for value in answers.values()) or "Select a comparison" in comparisons.values():
+        st.session_state._analysis_error = "Answer each trend and comparison question before submitting."
+        return
+    st.session_state.pop("_analysis_error", None)
+    record_submission("an", pack_analysis(answers, comparisons))
+
+
+def submit_diagnosis() -> None:
+    answers = {
+        str(question["id"]): st.session_state.get(f"diagnosis_{question['id']}")
+        for question in DIAGNOSIS_QUESTIONS
+    }
+    evidence = st.session_state.get("diagnosis_evidence", [])
+    reflection = st.session_state.get("diagnosis_reflection", "")
+    if any(value is None for value in answers.values()) or not evidence or len(reflection.strip()) < 20:
+        st.session_state._diagnosis_error = (
+            "Complete all diagnoses, select supporting evidence, and provide a brief explanation of at least 20 characters."
+        )
+        return
+    st.session_state.pop("_diagnosis_error", None)
+    _, reflection_feedback = score_reflection(reflection)
+    record_submission("di", pack_diagnosis(answers, evidence, reflection_feedback))
 
 
 def stage_result_banner(score: int, maximum: int) -> None:
@@ -465,8 +581,7 @@ def render_intake() -> None:
     )
     st.info("The goal is sound reasoning, not speed. You may use the Quick Reference in the sidebar.")
 
-    if st.button("Open the Case", type="primary", width="stretch"):
-        advance()
+    st.button("Open the Case", type="primary", width="stretch", on_click=advance)
 
 
 def render_classification() -> None:
@@ -490,26 +605,21 @@ def render_classification() -> None:
                         key=f"class_{index}",
                         label_visibility="collapsed",
                     )
-            submitted = st.form_submit_button("Submit Classifications", type="primary", width="stretch")
+            st.form_submit_button(
+                "Submit Classifications",
+                type="primary",
+                width="stretch",
+                on_click=submit_classification,
+            )
 
-        if submitted:
-            if "Select a section" in answers.values():
-                st.error("Classify every account before submitting the patient chart.")
-            else:
-                score, feedback = score_classifications(answers, ACCOUNTS)
-                st.session_state.results["classification"] = {
-                    "score": score,
-                    "max": MAX_SCORES["classification"],
-                    "feedback": feedback,
-                }
-                st.rerun()
+        if error := st.session_state.pop("_classification_error", None):
+            st.error(error)
         return
 
     stage_result_banner(result["score"], result["max"])
     with st.expander("Review every classification", expanded=True):
         feedback_list(result["feedback"], show_name=True)
-    if st.button("Continue to Liquidity", type="primary", width="stretch"):
-        advance()
+    st.button("Continue to Liquidity", type="primary", width="stretch", on_click=advance)
 
 
 def render_liquidity() -> None:
@@ -522,6 +632,7 @@ def render_liquidity() -> None:
             order = st.multiselect(
                 "Select all four current assets from most liquid to least liquid",
                 st.session_state.liquidity_option_order,
+                key="liquidity_order",
                 help="Your selections will appear in the order you choose them.",
             )
             st.divider()
@@ -532,22 +643,15 @@ def render_liquidity() -> None:
                     ("Select an answer",) + tuple(question["options"]),
                     key=f"context_{question['id']}",
                 )
-            submitted = st.form_submit_button("Submit Judgment Checks", type="primary", width="stretch")
+            st.form_submit_button(
+                "Submit Judgment Checks",
+                type="primary",
+                width="stretch",
+                on_click=submit_liquidity,
+            )
 
-        if submitted:
-            if len(order) != len(LIQUIDITY_ORDER) or "Select an answer" in answers.values():
-                st.error("Complete the liquidity order and all three judgment checks.")
-            else:
-                order_correct = score_order(order, LIQUIDITY_ORDER)
-                context_score, feedback = score_multiple_choice(answers, CONTEXT_QUESTIONS)
-                st.session_state.results["liquidity"] = {
-                    "score": context_score + int(order_correct),
-                    "max": MAX_SCORES["liquidity"],
-                    "order_correct": order_correct,
-                    "submitted_order": order,
-                    "feedback": feedback,
-                }
-                st.rerun()
+        if error := st.session_state.pop("_liquidity_error", None):
+            st.error(error)
         return
 
     stage_result_banner(result["score"], result["max"])
@@ -556,8 +660,7 @@ def render_liquidity() -> None:
     )
     with st.expander("Review the judgment checks", expanded=True):
         feedback_list(result["feedback"])
-    if st.button("Continue to Ratio Lab", type="primary", width="stretch"):
-        advance()
+    st.button("Continue to Ratio Lab", type="primary", width="stretch", on_click=advance)
 
 
 def render_financial_tiles() -> None:
@@ -638,43 +741,31 @@ def render_ratio_lab() -> None:
             left, right = st.columns(2)
             with left:
                 working_capital = st.number_input(
-                    "Working capital ($)", value=None, step=10_000, placeholder="Enter dollars"
+                    "Working capital ($)", value=None, step=10_000, placeholder="Enter dollars",
+                    key="ratio_working_capital",
                 )
                 current_ratio = st.number_input(
-                    "Current ratio", value=None, step=0.01, placeholder="Example: 1.75"
+                    "Current ratio", value=None, step=0.01, placeholder="Example: 1.75",
+                    key="ratio_current_ratio",
                 )
             with right:
                 debt_to_assets = st.number_input(
-                    "Debt-to-assets ratio (%)", value=None, step=0.1, placeholder="Enter a percent"
+                    "Debt-to-assets ratio (%)", value=None, step=0.1, placeholder="Enter a percent",
+                    key="ratio_debt_to_assets",
                 )
                 debt_to_equity = st.number_input(
-                    "Debt-to-equity ratio (%)", value=None, step=0.1, placeholder="Enter a percent"
+                    "Debt-to-equity ratio (%)", value=None, step=0.1, placeholder="Enter a percent",
+                    key="ratio_debt_to_equity",
                 )
-            submitted = st.form_submit_button("Record Vital Signs", type="primary", width="stretch")
+            st.form_submit_button(
+                "Record Vital Signs",
+                type="primary",
+                width="stretch",
+                on_click=submit_ratios,
+            )
 
-        if submitted:
-            entries = {
-                "working_capital": working_capital,
-                "current_ratio": current_ratio,
-                "debt_to_assets": debt_to_assets,
-                "debt_to_equity": debt_to_equity,
-            }
-            if any(value is None for value in entries.values()):
-                st.error("Enter all four financial vital signs before submitting.")
-            else:
-                checks = {
-                    "working_capital": score_ratio_entry(working_capital, expected.working_capital, 100),
-                    "current_ratio": score_ratio_entry(current_ratio, expected.current_ratio, 0.01),
-                    "debt_to_assets": score_ratio_entry(debt_to_assets, expected.debt_to_assets, 0.1),
-                    "debt_to_equity": score_ratio_entry(debt_to_equity, expected.debt_to_equity, 0.1),
-                }
-                st.session_state.results["ratios"] = {
-                    "score": sum(checks.values()),
-                    "max": MAX_SCORES["ratios"],
-                    "checks": checks,
-                    "entries": entries,
-                }
-                st.rerun()
+        if error := st.session_state.pop("_ratio_error", None):
+            st.error(error)
         return
 
     stage_result_banner(result["score"], result["max"])
@@ -690,8 +781,7 @@ def render_ratio_lab() -> None:
         """,
         unsafe_allow_html=True,
     )
-    if st.button("Continue to Comparisons", type="primary", width="stretch"):
-        advance()
+    st.button("Continue to Comparisons", type="primary", width="stretch", on_click=advance)
 
 
 def comparison_rows() -> list[dict[str, str]]:
@@ -750,24 +840,15 @@ def render_analysis() -> None:
                     ("Select a comparison",) + COMPARISON_OPTIONS,
                     key=f"comparison_{question['id']}",
                 )
-            submitted = st.form_submit_button("Submit Trend Analysis", type="primary", width="stretch")
+            st.form_submit_button(
+                "Submit Trend Analysis",
+                type="primary",
+                width="stretch",
+                on_click=submit_analysis,
+            )
 
-        if submitted:
-            if any(value is None for value in answers.values()) or "Select a comparison" in comparison_answers.values():
-                st.error("Answer each trend and comparison question before submitting.")
-            else:
-                analysis_score, feedback = score_multiple_choice(answers, ANALYSIS_QUESTIONS)
-                comparison_score, comparison_feedback = score_multiple_choice(
-                    comparison_answers, COMPARISON_QUESTIONS
-                )
-                st.session_state.results["analysis"] = {
-                    "score": analysis_score + comparison_score,
-                    "max": MAX_SCORES["analysis"],
-                    "feedback": feedback,
-                    "comparison_score": comparison_score,
-                    "comparison_feedback": comparison_feedback,
-                }
-                st.rerun()
+        if error := st.session_state.pop("_analysis_error", None):
+            st.error(error)
         return
 
     stage_result_banner(result["score"], result["max"])
@@ -779,8 +860,7 @@ def render_analysis() -> None:
             "Prior year = intracompany · Peer average = industry-average · Competitor = intercompany"
         )
         feedback_list(result["comparison_feedback"], show_name=True)
-    if st.button("Continue to Diagnosis", type="primary", width="stretch"):
-        advance()
+    st.button("Continue to Diagnosis", type="primary", width="stretch", on_click=advance)
 
 
 def chart_table(title: str, rows: tuple[tuple[str, str, float | None], ...]) -> str:
@@ -909,38 +989,27 @@ def render_diagnosis() -> None:
             evidence = st.multiselect(
                 "Which evidence supports the best overall diagnosis? Select all that apply.",
                 EVIDENCE_OPTIONS,
+                key="diagnosis_evidence",
             )
             reflection = st.text_area(
                 "In one or two sentences, explain your recommendation to the lender.",
                 placeholder="The company appears ... because ...",
                 max_chars=500,
+                key="diagnosis_reflection",
                 help="Three points: state a recommendation, cite liquidity evidence, and cite solvency evidence.",
             )
             st.caption(
                 "Written rationale rubric (3 points): recommendation · liquidity evidence · solvency evidence"
             )
-            submitted = st.form_submit_button("Sign the Patient Chart", type="primary", width="stretch")
+            st.form_submit_button(
+                "Sign the Patient Chart",
+                type="primary",
+                width="stretch",
+                on_click=submit_diagnosis,
+            )
 
-        if submitted:
-            if any(value is None for value in answers.values()) or not evidence or len(reflection.strip()) < 20:
-                st.error("Complete all diagnoses, select supporting evidence, and provide a brief explanation of at least 20 characters.")
-            else:
-                diagnosis_score, feedback = score_multiple_choice(answers, DIAGNOSIS_QUESTIONS)
-                evidence_score, evidence_feedback = score_evidence(
-                    evidence, CORRECT_EVIDENCE, EVIDENCE_OPTIONS
-                )
-                reflection_score, reflection_feedback = score_reflection(reflection)
-                st.session_state.results["diagnosis"] = {
-                    "score": diagnosis_score + evidence_score + reflection_score,
-                    "max": MAX_SCORES["diagnosis"],
-                    "feedback": feedback,
-                    "evidence_score": evidence_score,
-                    "evidence_feedback": evidence_feedback,
-                    "reflection_score": reflection_score,
-                    "reflection_feedback": reflection_feedback,
-                }
-                st.session_state.reflection = reflection.strip()
-                st.rerun()
+        if error := st.session_state.pop("_diagnosis_error", None):
+            st.error(error)
         return
 
     stage_result_banner(result["score"], result["max"])
@@ -948,8 +1017,7 @@ def render_diagnosis() -> None:
         feedback_list(result["feedback"])
         render_evidence_feedback(result)
         render_reflection_feedback(result)
-    if st.button("Complete the Case", type="primary", width="stretch"):
-        advance()
+    st.button("Complete the Case", type="primary", width="stretch", on_click=advance)
 
 
 def performance_label(percent: float) -> tuple[str, str]:
@@ -998,8 +1066,7 @@ def render_debrief() -> None:
         """
     )
 
-    if st.button("Try the Case Again", type="primary", width="stretch"):
-        reset_case()
+    st.button("Try the Case Again", type="primary", width="stretch", on_click=reset_case)
 
 
 inject_styles()
@@ -1019,3 +1086,4 @@ renderers = (
     render_debrief,
 )
 renderers[st.session_state.stage]()
+persist_progress()

@@ -8,6 +8,25 @@ import re
 from typing import Mapping, Sequence
 
 
+REFLECTION_CRITERIA = (
+    {
+        "label": "Recommendation",
+        "patterns": ("approve", "approval", "condition", "monitor", "recommend", "reject", "extend", "caution"),
+        "guidance": "State what the lender should do, including any conditions or monitoring.",
+    },
+    {
+        "label": "Liquidity evidence",
+        "patterns": ("liquidity", "working capital", "current ratio", "current assets", "inventory"),
+        "guidance": "Cite a liquidity fact such as working capital, the current ratio, or inventory concentration.",
+    },
+    {
+        "label": "Solvency evidence",
+        "patterns": ("solvency", "debt", "liabilities", "creditor financing"),
+        "guidance": "Cite a solvency fact such as a debt ratio or increased reliance on creditor financing.",
+    },
+)
+
+
 @dataclass(frozen=True)
 class RatioSnapshot:
     working_capital: float
@@ -113,36 +132,27 @@ def score_evidence(
 def score_reflection(text: str) -> tuple[int, list[dict[str, object]]]:
     """Apply a transparent three-part rubric to the written lender rationale."""
     normalized = re.sub(r"[^a-z0-9]+", " ", text.lower()).strip()
-    criteria = (
-        {
-            "label": "Recommendation",
-            "patterns": ("approve", "approval", "condition", "monitor", "recommend", "reject", "extend", "caution"),
-            "guidance": "State what the lender should do, including any conditions or monitoring.",
-        },
-        {
-            "label": "Liquidity evidence",
-            "patterns": ("liquidity", "working capital", "current ratio", "current assets", "inventory"),
-            "guidance": "Cite a liquidity fact such as working capital, the current ratio, or inventory concentration.",
-        },
-        {
-            "label": "Solvency evidence",
-            "patterns": ("solvency", "debt", "liabilities", "creditor financing"),
-            "guidance": "Cite a solvency fact such as a debt ratio or increased reliance on creditor financing.",
-        },
-    )
-
-    feedback = []
-    for criterion in criteria:
-        met = any(pattern in normalized for pattern in criterion["patterns"])
-        feedback.append(
-            {
-                "label": criterion["label"],
-                "met": met,
-                "guidance": criterion["guidance"],
-            }
-        )
-
+    flags = [
+        any(pattern in normalized for pattern in criterion["patterns"])
+        for criterion in REFLECTION_CRITERIA
+    ]
+    feedback = reflection_feedback_from_flags(flags)
     return sum(bool(item["met"]) for item in feedback), feedback
+
+
+def reflection_feedback_from_flags(flags: Sequence[bool]) -> list[dict[str, object]]:
+    """Rebuild non-identifying rubric feedback from compact saved outcomes."""
+    if len(flags) != len(REFLECTION_CRITERIA):
+        raise ValueError("Reflection feedback requires one flag per rubric criterion.")
+
+    return [
+        {
+            "label": criterion["label"],
+            "met": bool(met),
+            "guidance": criterion["guidance"],
+        }
+        for criterion, met in zip(REFLECTION_CRITERIA, flags)
+    ]
 
 
 def format_currency(value: float) -> str:
