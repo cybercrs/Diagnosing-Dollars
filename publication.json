@@ -1,0 +1,7 @@
+{
+  "repository": "cybercrs/Diagnosing-Dollars",
+  "source_branch": "rollout/stlite-browser-navigation",
+  "source_commit": "7713b0b9bbc6a5eeaf94f896dcb754d8c2168a15",
+  "runtime": "stlite 1.8.1 / Streamlit 1.57.0 / Pyodide 0.29.3",
+  "hosted_browser_test": "not run; cloud proxy restriction respected"
+}
