@@ -1,0 +1,43 @@
+test_comparison_vocabulary_review_shows_each_answer (test_answer_feedback.AnswerFeedbackTests.test_comparison_vocabulary_review_shows_each_answer) ... 2026-10-10 16:10:47.142 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2026-10-10 16:10:47.772 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2026-10-10 16:10:47.774 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2026-10-10 16:10:47.774 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2026-10-10 16:10:47.774 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+ok
+test_ratio_review_distinguishes_correct_and_incorrect_answers (test_answer_feedback.AnswerFeedbackTests.test_ratio_review_distinguishes_correct_and_incorrect_answers) ... 2026-10-10 16:10:49.443 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2026-10-10 16:10:49.691 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2026-10-10 16:10:49.691 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2026-10-10 16:10:49.692 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2026-10-10 16:10:49.692 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+ok
+test_complete_case_reaches_full_score_debrief (test_app_flow.PerfectCaseFlowTests.test_complete_case_reaches_full_score_debrief) ... 2026-10-10 16:10:49.910 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+ok
+test_future_fields_and_nonfinite_numbers_are_rejected (test_browser_drafts.BrowserDraftTests.test_future_fields_and_nonfinite_numbers_are_rejected) ... ok
+test_restore_draft_without_submitting_or_saving_written_text (test_browser_drafts.BrowserDraftTests.test_restore_draft_without_submitting_or_saving_written_text) ... ok
+test_complete_case_reaches_full_score_debrief (test_browser_flow.PerfectCaseFlowTests.test_complete_case_reaches_full_score_debrief) ... 2026-10-10 16:10:52.196 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+ok
+test_move_changes_only_view (test_browser_navigation.BrowserNavigationTests.test_move_changes_only_view) ... ok
+test_review_refresh_and_future_view (test_browser_navigation.BrowserNavigationTests.test_review_refresh_and_future_view) ... 2026-10-10 16:10:53.162 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2026-10-10 16:10:53.983 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+ok
+test_case_ratios (test_engine.RatioTests.test_case_ratios) ... ok
+test_zero_denominator_is_rejected (test_engine.RatioTests.test_zero_denominator_is_rejected) ... ok
+test_all_correct_classifications (test_engine.ScoringTests.test_all_correct_classifications) ... ok
+test_evidence_scoring_awards_partial_credit_and_penalizes_distractors (test_engine.ScoringTests.test_evidence_scoring_awards_partial_credit_and_penalizes_distractors) ... ok
+test_liquidity_order_requires_exact_sequence (test_engine.ScoringTests.test_liquidity_order_requires_exact_sequence) ... ok
+test_negative_currency_format (test_engine.ScoringTests.test_negative_currency_format) ... ok
+test_ratio_rounding_tolerance (test_engine.ScoringTests.test_ratio_rounding_tolerance) ... ok
+test_reflection_rubric_identifies_missing_solvency_evidence (test_engine.ScoringTests.test_reflection_rubric_identifies_missing_solvency_evidence) ... ok
+test_reflection_rubric_scores_three_required_elements (test_engine.ScoringTests.test_reflection_rubric_scores_three_required_elements) ... ok
+test_malformed_snapshot_is_replaced_with_fresh_progress (test_progress.ProgressRecoveryTests.test_malformed_snapshot_is_replaced_with_fresh_progress) ... 2026-10-10 16:10:54.324 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+ok
+test_new_session_restores_mid_activity_page_and_results (test_progress.ProgressRecoveryTests.test_new_session_restores_mid_activity_page_and_results) ... 2026-10-10 16:10:54.619 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2026-10-10 16:10:55.384 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+ok
+test_restart_replaces_saved_progress (test_progress.ProgressRecoveryTests.test_restart_replaces_saved_progress) ... 2026-10-10 16:10:55.620 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 9.370s
+
+OK
