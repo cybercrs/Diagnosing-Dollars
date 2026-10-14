@@ -1,0 +1,24 @@
+{
+  "app": "Diagnosing Dollars",
+  "title": "Diagnosing Dollars",
+  "icon": "\ud83e\ude7a",
+  "svg_data_icon_decoded": true,
+  "changed_runtime_assets": [
+    "index.html"
+  ],
+  "asset_bytes": 109942,
+  "cold_initialization_ms": {
+    "samples": [
+      882.1000000000931,
+      430.5,
+      374.60000000009313,
+      1250.8999999999069,
+      529.6000000000931
+    ],
+    "median": 529.6000000000931,
+    "conditions": "Final icon-inclusive bundle; five cache-disabled fresh Chromium contexts on local loopback; no hosted/network speed or classroom capacity claim."
+  },
+  "page_console_errors": [],
+  "external_requests": [],
+  "runtime_python_wasm_requests": []
+}

@@ -32,3 +32,5 @@ node --test native/tests/*.test.mjs
 The build copies seven native assets and a hash manifest only. `--site-output PATH` writes only `PATH/js/`. Python and Node are development tools; neither is downloaded by learners. Current ES-module browsers with Web Crypto, BigInt, structured cloning and Compression Streams are required. Serve over HTTP(S); `file://` is unsupported. Chromium is tested; other browsers and physical devices remain unmeasured.
 
 See `VALIDATION.md` and `review/` for screenshots, browser outcomes, original/Python parity and source-protection evidence. Publishing verifies every old non-js static blob is identical and checks the exact source/static refs and Pages deployment. The known hosted proxy restriction is respected, with no alternate route. Local startup measurements are not school-network speed or classroom-capacity promises.
+
+The original tab icon is embedded as a self-contained SVG data asset. Final metadata QA verifies the exact title, decodes the icon, and confirms only index.html changed among runtime assets; lesson JavaScript/CSS/content are unchanged.

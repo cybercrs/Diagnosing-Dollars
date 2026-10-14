@@ -1,0 +1,36 @@
+{
+  "app": "Diagnosing Dollars",
+  "description": "Student-facing native HTML/CSS/JavaScript accounting activity",
+  "path": "/js/",
+  "files": {
+    "index.html": {
+      "bytes": 1810,
+      "sha256": "b8494b51afcee0dd716decc59da182c457e9a5f220ea4fc5d4a1b1cacf794ce4"
+    },
+    "app.js": {
+      "bytes": 20605,
+      "sha256": "1d4ce34436823f5c4f437f5b9e25b2ebef419bf0e9f25ce96896393d43713b65"
+    },
+    "engine.js": {
+      "bytes": 13047,
+      "sha256": "63e0ca0da05ef895bb35625bc97e4351a58fd5ab009f4e68bb1e9ccd1f448422"
+    },
+    "content.js": {
+      "bytes": 56954,
+      "sha256": "eac4261e2ece9317994546e546a78d3972f2966e32d8fc0425a835260e4ab1d4"
+    },
+    "style.css": {
+      "bytes": 6201,
+      "sha256": "65872c4bb58c804885458591ee7e71c816d8a35881a46d4565cc105a4b360c1a"
+    },
+    "original.css": {
+      "bytes": 6698,
+      "sha256": "e395800fe4561bdd30490ea823d5419de2b1521a47b7d5cb423f7d0352be490b"
+    },
+    "shared.js": {
+      "bytes": 4399,
+      "sha256": "75fe22938cea0e66f94f6e62da9379c8b8995d0be4a36465f6a60fe01c8cf053"
+    }
+  },
+  "asset_bytes": 109714
+}

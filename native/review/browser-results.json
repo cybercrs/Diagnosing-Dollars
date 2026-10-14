@@ -4,14 +4,14 @@
   "completion_bookmark": "http://127.0.0.1:40071/Diagnosing-Dollars/js/?progress=eJxNjksOgzAMBe_i9QjFIQGaq6AsEO0CCbUV_WwQd8eBLirvxvOevcoo6b18bshDUt9fUBo8jogqWtMRaFGPOjRQZ3pPbZrLGXlKapCXpFWGeylwFnXmmIwvxjgbVg5uzCglH46Jdqwx6TqV7LHLaKQ1Nk9nX6Hn1V_jMtjCeNWpj8RQxfA_9qvLG_KVpNsOtqozYw&draft=eJyNVcGO2jAQ_RUrqtQLuwosbLfcKlq1K7XSSj1WlTVxBmKtGae2A42q_nvHJoEELWXFBeznNzNvZh5_MiAwrddeKrutrddBW8qW2TfrUIQKSFRg1sKuhWqcQwoCvMfgBfC9ph2fWNdmkxOPt4ZPVcskXy1tbgK6rXDaPzOT5yfKIXgsBVApNPMUdoeisKESMQNgpCVRW03BD2n31j1r2kgFtQ5gpE9xl9mqS8toKLTh9NGLjcO9WIPn0BNRO1tbF8sCY9rJoahxMRxHGf4q81HSsTwftkgDxHQQ8uzxNH85nRNgeg0wG8V_EXLHkO8Vq19ZU6Lzb8WnX40O7Qkxv4aYXa7h7vLV_Ko2i6uIe0Y8cT_QBe5EbYDCJA0CcoZ1xB6h714PfWDoIwWgjS4Mnuf9_rLox3lLw49B80zJ0NZ4IESXENQOJnP8TFPZ-ODa06PD7xvYoYMNXnxYOz0K5eBCKM7id5BrvUPZIjipyv-J3MHJBpRlk7h5VbcQGscDwCthjBd7HSpNwhKKSDl4Z9drrVCy1uVr1C81bMjG5cSdLnnnOeCP7CmZCO90t7Gi29joIW9m9_kkz3N-3LfEAa9m5wKhQlEjOtHLVzRBFGjsXnArQ5_uVW-q0LC30MifPmLRBes950g5SYH7Xh7qjCenoch-Dqs1SLxX0iEDWIoSOs9cWfKsA6dfs-nsuOQoNdNQmWzVJ-YotqaGHXBrKZKzRiMxjWaN-UUrj2dM_hmJNWEHE1ByEyDgJMnTkaSES1RGc1uTtfa1x4AK44ilNIeReqseBfqiNxXXkBy7QAWNj8Qs3loTkIodPZm4QwOp2cEe_xi6KUmGc6rFOlYmzscKfMU3H5SyDY8tUyjUO-DN5dPHQceeHNagYyW-cRCni7uQqpBdv2X6lS2ntw_T2aK_jMnKYGXnA8vF_HYxH37OgV22y-ks76_O_m2yZf73HyfMlvc&view=6&numbers=eJyrVkouLSpKzSuJL0osycxXslIy1LMwNDJV0lFKSU0qiS_Jj08sLk4tKQbKmJromZogQyRFqYWlmSWVIO1GBnoGQIny_KLszLz0-OTEgsySxBygjIFSLQBkjyG-",
   "cold_initialization_ms": {
     "samples": [
-      1929.8999999999069,
-      2478,
-      1554.6000000000931,
-      1804,
-      1164.2999999998137
+      882.1000000000931,
+      430.5,
+      374.60000000009313,
+      1250.8999999999069,
+      529.6000000000931
     ],
-    "median": 1804,
-    "conditions": "Five cache-disabled fresh Chromium contexts on local loopback; no network-speed or capacity claim."
+    "median": 529.6000000000931,
+    "conditions": "Final icon-inclusive bundle; five cache-disabled fresh Chromium contexts on local loopback; no hosted/network speed or classroom capacity claim."
   },
   "checks": [
     {
@@ -60,6 +60,10 @@
     },
     {
       "name": "Raw rationale preserved across native Back/Forward, absent from URL, cleared by refresh",
+      "status": "passed"
+    },
+    {
+      "name": "Final title, original embedded tab icon and metadata-only runtime change; five fresh contexts",
       "status": "passed"
     }
   ],
