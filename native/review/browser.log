@@ -1,0 +1,84 @@
+PASSED: Classification validation, deliberate mistake, saved display order/drafts, review and one-shot submission
+PASSED: Ordered liquidity selections, accessible reorder buttons, validation and saved context answers
+PASSED: Incomplete numeric draft refresh, required values, decimal restoration and original ratio feedback
+PASSED: Original comparison rows, CSV download, keyboard table expansion and complete trend analysis
+PASSED: Session-only written rationale, saved rubric flags, validated diagnosis and actual 37/39 case completion
+PASSED: All six earlier pages are readonly, repeated review, keyboard/focus, refresh/bookmark and future rejection
+PASSED: 900px/390px responsive layouts, table scrolling, 44px navigation, both reset controls and independent sessions
+PASSED: All seven original Python stages, native snapshots, extra query values/fragments and malformed links
+PASSED: Two further complete cases: all-correct 39/39 and all-wrong 0/39, including evidence penalties
+PASSED: All four dynamic debrief performance labels and their finalized branding
+PASSED: Five local cold initializations and zero external requests, package/runtime downloads or browser errors
+{
+  "url": "http://127.0.0.1:40071/Diagnosing-Dollars/js/",
+  "conditions": "Actual local native Chromium; all external requests blocked.",
+  "cold_initialization_ms": {
+    "samples": [
+      1929.8999999999069,
+      2478,
+      1554.6000000000931,
+      1804,
+      1164.2999999998137
+    ],
+    "median": 1804,
+    "conditions": "Five cache-disabled fresh Chromium contexts on local loopback; no network-speed or capacity claim."
+  },
+  "checks": [
+    {
+      "name": "Classification validation, deliberate mistake, saved display order/drafts, review and one-shot submission",
+      "status": "passed"
+    },
+    {
+      "name": "Ordered liquidity selections, accessible reorder buttons, validation and saved context answers",
+      "status": "passed"
+    },
+    {
+      "name": "Incomplete numeric draft refresh, required values, decimal restoration and original ratio feedback",
+      "status": "passed"
+    },
+    {
+      "name": "Original comparison rows, CSV download, keyboard table expansion and complete trend analysis",
+      "status": "passed"
+    },
+    {
+      "name": "Session-only written rationale, saved rubric flags, validated diagnosis and actual 37/39 case completion",
+      "status": "passed"
+    },
+    {
+      "name": "All six earlier pages are readonly, repeated review, keyboard/focus, refresh/bookmark and future rejection",
+      "status": "passed"
+    },
+    {
+      "name": "900px/390px responsive layouts, table scrolling, 44px navigation, both reset controls and independent sessions",
+      "status": "passed"
+    },
+    {
+      "name": "All seven original Python stages, native snapshots, extra query values/fragments and malformed links",
+      "status": "passed"
+    },
+    {
+      "name": "Two further complete cases: all-correct 39/39 and all-wrong 0/39, including evidence penalties",
+      "status": "passed"
+    },
+    {
+      "name": "All four dynamic debrief performance labels and their finalized branding",
+      "status": "passed"
+    },
+    {
+      "name": "Five local cold initializations and zero external requests, package/runtime downloads or browser errors",
+      "status": "passed"
+    }
+  ],
+  "requests": [
+    "/Diagnosing-Dollars/js/",
+    "/Diagnosing-Dollars/js/app.js",
+    "/Diagnosing-Dollars/js/content.js",
+    "/Diagnosing-Dollars/js/engine.js",
+    "/Diagnosing-Dollars/js/original.css",
+    "/Diagnosing-Dollars/js/shared.js",
+    "/Diagnosing-Dollars/js/style.css"
+  ],
+  "external_requests": [],
+  "page_errors": [],
+  "console_errors": []
+}

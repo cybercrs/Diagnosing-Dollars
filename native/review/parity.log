@@ -1,0 +1,18 @@
+✔ all original scoring structures match 84 independent Python submission cases (122.962028ms)
+✔ current/prior ratios, tolerance boundaries and exact Python display rounding (6.105049ms)
+✔ legacy progress and draft tokens retain display orders, answered gates and Python compatibility (713.896643ms)
+✔ full perfect and deliberately wrong routes preserve 39-point grading and original submission-only gates (111.270731ms)
+✔ evidence deductions, reflection substring rubric, raw-text session-only rules and 20-character validation (68.661112ms)
+✔ number entry and unfinished native numeric drafts restore without changing original typed draft compatibility (26.659829ms)
+✔ every review stage independently rejects edits, submissions, rationale, reset and future advancement (5.918435ms)
+✔ malformed schema, duplicate orders, future drafts, unknown choices and future views are rejected (6.855556ms)
+✔ reset preserves copied completed links and isolates native case instances (19.936591ms)
+✔ all captured variants, feedback, help and metadata contain no provisional app branding (7.443652ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1733.175679

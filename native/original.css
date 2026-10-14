@@ -1,0 +1,231 @@
+:root {
+            --ud-red: #D50032;
+            --ud-blue: #002554;
+            --ud-pale-blue: #EAF1F8;
+            --ink: #10233f;
+            --muted: #53657d;
+            --paper: #ffffff;
+            --line: #d9e1ea;
+        }
+
+        .stApp {
+            background:
+                radial-gradient(circle at 100% 0%, rgba(213, 0, 50, 0.07), transparent 28rem),
+                linear-gradient(180deg, #f7f9fc 0%, #eef3f8 100%);
+            color: var(--ink);
+        }
+
+        .block-container {
+            max-width: 1120px;
+            padding-top: 2rem;
+            padding-bottom: 4rem;
+        }
+
+        h1, h2, h3 { color: var(--ud-blue); letter-spacing: -0.025em; }
+        h1 { font-weight: 850 !important; }
+
+        .brand-shell {
+            background: linear-gradient(120deg, var(--ud-blue) 0%, #063d78 100%);
+            border-radius: 24px;
+            color: white;
+            overflow: hidden;
+            padding: 1.6rem 1.8rem;
+            position: relative;
+            box-shadow: 0 18px 46px rgba(0, 37, 84, 0.18);
+            margin-bottom: 1.25rem;
+        }
+
+        .brand-shell::after {
+            background: var(--ud-red);
+            content: "";
+            height: 8px;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .brand-kicker {
+            color: #b9d3ee;
+            font-size: 0.76rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            margin-bottom: 0.45rem;
+            text-transform: uppercase;
+        }
+
+        .brand-title {
+            color: white;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            letter-spacing: -0.045em;
+            line-height: 0.98;
+            margin: 0;
+        }
+
+        .brand-subtitle {
+            color: #dce8f4;
+            font-size: 1.02rem;
+            margin: 0.7rem 0 0;
+            max-width: 48rem;
+        }
+
+        .clinical-card {
+            background: rgba(255, 255, 255, 0.93);
+            border: 1px solid var(--line);
+            border-left: 5px solid var(--ud-red);
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 37, 84, 0.07);
+            margin: 0.75rem 0 1.25rem;
+            padding: 1rem 1.15rem;
+        }
+
+        .clinical-label {
+            color: var(--ud-red);
+            font-size: 0.72rem;
+            font-weight: 850;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .clinical-title { color: var(--ud-blue); font-size: 1.15rem; font-weight: 850; margin: 0.22rem 0; }
+        .clinical-copy { color: var(--muted); margin: 0; }
+
+        .stage-line {
+            color: var(--ud-blue);
+            display: flex;
+            font-size: 0.83rem;
+            font-weight: 800;
+            justify-content: space-between;
+            margin-bottom: 0.35rem;
+        }
+
+        .formula-chip {
+            background: var(--ud-pale-blue);
+            border: 1px solid #c9d9e9;
+            border-radius: 12px;
+            color: var(--ud-blue);
+            font-weight: 750;
+            margin: 0.35rem 0;
+            padding: 0.65rem 0.8rem;
+        }
+
+        .feedback-row {
+            border-bottom: 1px solid #e7ecf2;
+            padding: 0.7rem 0;
+        }
+
+        .feedback-row:last-child { border-bottom: 0; }
+        .feedback-good { color: #176b45; font-weight: 800; }
+        .feedback-fix { color: #a33232; font-weight: 800; }
+
+        .vital-grid {
+            display: grid;
+            gap: 0.75rem;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            margin: 0.75rem 0 1.25rem;
+        }
+
+        .vital-box {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            box-shadow: 0 6px 18px rgba(0, 37, 84, 0.05);
+            min-width: 0;
+            padding: 0.8rem 0.9rem;
+        }
+
+        .vital-label {
+            color: var(--muted);
+            font-size: 0.72rem;
+            font-weight: 750;
+            line-height: 1.2;
+            min-height: 1.8em;
+        }
+
+        .vital-value {
+            color: var(--ink);
+            font-size: clamp(1.05rem, 1.65vw, 1.45rem);
+            font-variant-numeric: tabular-nums;
+            font-weight: 750;
+            line-height: 1.25;
+            white-space: nowrap;
+        }
+
+        .chart-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 0.88rem;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .chart-table th {
+            background: var(--ud-blue);
+            color: white;
+            padding: 0.65rem 0.75rem;
+            text-align: left;
+        }
+
+        .chart-table td {
+            background: white;
+            border-bottom: 1px solid var(--line);
+            padding: 0.55rem 0.75rem;
+            vertical-align: top;
+        }
+
+        .chart-table td:last-child {
+            font-variant-numeric: tabular-nums;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .chart-section td {
+            background: var(--ud-pale-blue);
+            color: var(--ud-blue);
+            font-weight: 850;
+        }
+
+        .chart-total td { font-weight: 850; }
+
+        div[data-testid="stMetric"] {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            box-shadow: 0 6px 18px rgba(0, 37, 84, 0.05);
+            padding: 0.8rem 1rem;
+        }
+
+        div[data-testid="stForm"] {
+            background: rgba(255, 255, 255, 0.82);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 1rem;
+        }
+
+        .stButton > button, .stFormSubmitButton > button {
+            border-radius: 999px;
+            font-weight: 800;
+            min-height: 2.8rem;
+        }
+
+        .stButton > button[kind="primary"], .stFormSubmitButton > button[kind="primary"] {
+            background: var(--ud-red);
+            border-color: var(--ud-red);
+        }
+
+        div[data-testid="stProgress"] > div > div > div { background-color: var(--ud-red); }
+
+        @media (min-width: 769px) {
+            [data-testid="stSidebarCollapseButton"],
+            [data-testid="stSidebarCollapsedControl"] {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .block-container { padding-left: 1rem; padding-right: 1rem; padding-top: 1rem; }
+            .brand-shell { border-radius: 18px; padding: 1.35rem 1.15rem; }
+            .clinical-card { padding: 0.9rem; }
+        }

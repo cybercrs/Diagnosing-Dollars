@@ -1,0 +1,42 @@
+{
+  "url": "http://127.0.0.1:38953/Diagnosing-Dollars/js/",
+  "conditions": "Actual local native Chromium; all external requests blocked.",
+  "body_on_failure": "Skip to activity\nPatient Chart\n\nGem City Outfitters\n\nQuick Reference\nRestart Case\nFINANCIAL HEALTH LAB\nDiagnosing Dollars\n\nRead the balance sheet. Check the vital signs. Make a diagnosis supported by evidence.\n\nStage 6 of 7\nMake the Diagnosis\n6 of 7\nComparisons\n\nA ratio is an indicator\u2014not a complete diagnosis. Compare the results before reaching a conclusion.\n\nFinancial Vital Signs and Comparisons\nComparison\tWorking capital\tCurrent ratio\tDebt to assets\tDebt to equity\nGem City \u2014 current year\t$260,000\t1.81:1\t54.5%\t120.0%\nGem City \u2014 prior year\t$260,000\t2.00:1\t50.0%\t100.0%\nAverage of all peers\tNot provided\t1.70:1\t48.0%\t92.0%\nRiver City Gear (competitor)\t$310,000\t2.10:1\t45.0%\t82.0%\nExpand table\nDownload table as CSV\n\nVital signs recorded: 6 of 6 correct.\n\nReview the trend analysis\n\u2713 Correct\nBoth amounts rose by $60,000, but that increase was much larger relative to the smaller beginning current-liability balance.\n\u2713 Correct\nInventory may take longer to sell and convert to cash than cash or receivables.\n\u2713 Correct\nHigher debt-to-assets and debt-to-equity ratios indicate greater reliance on creditor financing and greater risk.\n\nComparison vocabulary: 3 of 3 correct.\n\nPrior year = intracompany \u00b7 Peer average = industry-average \u00b7 Competitor = intercompany\n\nCurrent year compared with Gem City Outfitters last year\n\u2713 Correct\nComparing the same company across different years is an intracompany comparison.\nCurrent year compared with the average of all peers\n\u2713 Correct\nComparing one company with the average results of its peer group is an industry-average comparison.\nCurrent year compared with River City Gear\n\u2713 Correct\nComparing one company with a specific competitor is an intercompany comparison.\nContinue to Diagnosis",
+  "checks": [
+    {
+      "name": "Classification validation, deliberate mistake, saved display order/drafts, review and one-shot submission",
+      "status": "passed"
+    },
+    {
+      "name": "Ordered liquidity selections, accessible reorder buttons, validation and saved context answers",
+      "status": "passed"
+    },
+    {
+      "name": "Incomplete numeric draft refresh, required values, decimal restoration and original ratio feedback",
+      "status": "passed"
+    },
+    {
+      "name": "Original comparison rows, CSV download, keyboard table expansion and complete trend analysis",
+      "status": "passed"
+    },
+    {
+      "name": "Browser walkthrough",
+      "status": "failed",
+      "error": "Traceback (most recent call last):\n  File \"/workspace/Diagnosing-Dollars/native/tests/browser.py\", line 261, in main\n    button(\"Sign the Patient Chart\")\n    ^^^^^^^^^\n  File \"/workspace/Diagnosing-Dollars/native/tests/browser.py\", line 88, in loaded\n    page.wait_for_function(\"v=>document.documentElement.dataset.view===String(v)\", arg=view)\n  File \"/workspace/.cloud-setup/venvs/main/lib/python3.12/site-packages/playwright/sync_api/_generated.py\", line 12761, in wait_for_function\n    self._sync(\n  File \"/workspace/.cloud-setup/venvs/main/lib/python3.12/site-packages/playwright/_impl/_sync_base.py\", line 115, in _sync\n    return task.result()\n           ^^^^^^^^^^^^^\n  File \"/workspace/.cloud-setup/venvs/main/lib/python3.12/site-packages/playwright/_impl/_page.py\", line 1151, in wait_for_function\n    return await self._main_frame.wait_for_function(**locals_to_params(locals()))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/.cloud-setup/venvs/main/lib/python3.12/site-packages/playwright/_impl/_frame.py\", line 940, in wait_for_function\n    await self._channel.send(\"waitForFunction\", self._timeout, params)\n  File \"/workspace/.cloud-setup/venvs/main/lib/python3.12/site-packages/playwright/_impl/_connection.py\", line 76, in send\n    return await self._connection.wrap_api_call(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/.cloud-setup/venvs/main/lib/python3.12/site-packages/playwright/_impl/_connection.py\", line 632, in wrap_api_call\n    raise rewrite_error(error, f\"{parsed_st['apiName']}: {error}\") from None\nplaywright._impl._errors.TimeoutError: Page.wait_for_function: Timeout 30000ms exceeded.\n"
+    }
+  ],
+  "requests": [
+    "/Diagnosing-Dollars/js/",
+    "/Diagnosing-Dollars/js/app.js",
+    "/Diagnosing-Dollars/js/content.js",
+    "/Diagnosing-Dollars/js/engine.js",
+    "/Diagnosing-Dollars/js/original.css",
+    "/Diagnosing-Dollars/js/shared.js",
+    "/Diagnosing-Dollars/js/style.css"
+  ],
+  "external_requests": [],
+  "page_errors": [
+    "Cannot access 'text' before initialization"
+  ],
+  "console_errors": []
+}
