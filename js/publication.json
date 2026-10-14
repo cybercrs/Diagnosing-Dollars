@@ -1,8 +1,8 @@
 {
   "repository": "cybercrs/Diagnosing-Dollars",
   "source_branch": "native/html-js",
-  "source_commit": "33b8668c7f3d761378db8a92c5c8aa70214ffac9",
-  "static_parent": "c4717421a49bf107f75ff314d4dc4151ceaa8070",
+  "source_commit": "5c0435d0c873382209d18dce2086ecc14e7cdd6b",
+  "static_parent": "ad4c7a0f00111d095f36c0b900ab02752404b562",
   "description": "Student-facing native HTML/CSS/JavaScript accounting activity",
   "path": "/js/",
   "hosted_browser_testing": "Not run; known proxy restriction respected"
